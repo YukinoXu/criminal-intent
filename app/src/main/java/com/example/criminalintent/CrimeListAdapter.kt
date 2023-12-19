@@ -1,7 +1,9 @@
 package com.example.criminalintent
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.criminalintent.databinding.ListItemCrimeBinding
 
@@ -21,10 +23,7 @@ class CrimeListAdapter(private val crimes: List<Crime>): RecyclerView.Adapter<Cr
 
     override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
         val crime = crimes[position]
-        holder.apply {
-            binding.crimeTitle.text = crime.title
-            binding.crimeDate.text = crime.date.toString()
-        }
+        holder.bind(crime)
     }
 
     override fun getItemCount(): Int = crimes.size
@@ -33,11 +32,22 @@ class CrimeListAdapter(private val crimes: List<Crime>): RecyclerView.Adapter<Cr
 class CrimeHolder(
     val binding: ListItemCrimeBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-
     fun bind(crime: Crime) {
-        binding.apply {
-            crimeTitle.text = crime.title
-            crimeDate.text = crime.date.toString()
+        binding.crimeTitle.text = crime.title
+        binding.crimeDate.text = crime.date.toString()
+
+        binding.root.setOnClickListener {
+            Toast.makeText(
+                binding.root.context,
+                "${crime.title} clicked!",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        binding.crimeSolved.visibility = if (crime.isSolved) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
     }
 }
